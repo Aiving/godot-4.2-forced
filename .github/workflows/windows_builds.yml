@@ -23,13 +23,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Editor (target=editor, tests=yes)
-            cache-name: windows-editor
+          - name: Editor w/ Mono (target=editor)
+            cache-name: windows-editor-mono
             target: editor
-            tests: true
-            # Skip debug symbols, they're way too big with MSVC.
-            sconsflags: debug_symbols=no vsproj=yes vsproj_gen_only=no windows_subsystem=console
+            sconsflags: module_mono_enabled=yes
             bin: "./bin/godot.windows.editor.x86_64.exe"
+            build-mono: true
+            tests: false # Disabled due freeze caused by mix Mono build and CI
+            doc-test: true
+            proj-conv: true
+            api-compat: true
+            artifact: true
+
+          - name: Template (target=template_debug)
+            cache-name: windows-template
+            target: template_debug
+            tests: false
+            sconsflags: debug_symbols=no
 
           - name: Template (target=template_release)
             cache-name: windows-template
